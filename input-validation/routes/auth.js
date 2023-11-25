@@ -13,7 +13,13 @@ router.post("/login", authController.postLogin);
 
 router.post(
   "/signup",
-  check("email").isEmail().withMessage("Please enter a valid message!"),
+  check("email")
+    .isEmail()
+    .withMessage("Please enter a valid message!")
+    .custom((value, req) => {
+      if (value === "akuna@gmail.com") throw new Error("Akuna is a traitor");
+      return true;
+    }),
   authController.postSignup
 );
 
