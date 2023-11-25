@@ -27,6 +27,11 @@ router.post(
     )
       .isLength({ min: 5, max: 10 })
       .isAlphanumeric(),
+    body("confirmPassword").custom((value, { req }) => {
+      if (value !== req.body.password)
+        throw new Error("Passwords should match");
+      return true;
+    }),
   ],
   authController.postSignup
 );
