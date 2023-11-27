@@ -25,6 +25,11 @@ exports.getLogin = (req, res, next) => {
     isAuthenticated: false,
     csrfToken: req.csrfToken(),
     errorMessage: message,
+    oldInput: {
+      email: "",
+      password: "",
+    },
+    validationErros: [],
   });
 };
 
@@ -50,10 +55,21 @@ exports.getSignup = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
   const { email, password } = req.body;
 
-  User.findOne({ email: email })
+  User.findOne({ email })
     .then((user) => {
       if (!user) {
-        req.flash("error", "Invalid email or password");
+        res.render("auth/login", {
+          path: "/login",
+          pageTitle: "Login",
+          isAuthenticated: false,
+          csrfToken: req.csrfToken(),
+          errorMessage: "Invalid email or password",
+          oldInput: {
+            email,
+            password,
+          },
+          validationErrors: [],
+        });
         return res.redirect("/login");
       }
       bcrypt.compare(password, user.password).then((doMatch) => {
@@ -85,7 +101,7 @@ exports.postSignup = (req, res, next) => {
         email,
         password,
         confirmPassword,
-      },
+      },fx
     });
   }
 
