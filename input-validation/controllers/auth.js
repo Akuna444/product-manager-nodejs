@@ -29,7 +29,7 @@ exports.getLogin = (req, res, next) => {
       email: "",
       password: "",
     },
-    validationErros: [],
+    validationErrors: [],
   });
 };
 
@@ -90,8 +90,6 @@ exports.postLogin = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
   const { email, password, confirmPassword } = req.body;
   const errors = validationResult(req);
-
-  console.log(errors.array());
 
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/signup", {
