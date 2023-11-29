@@ -8,6 +8,7 @@ exports.getAddProduct = (req, res, next) => {
     editing: false,
     hasError: false,
     errorMessage: null,
+    validationErrors: [],
     isAuthenticated: req.session.isLoggedIn,
   });
 };
@@ -26,6 +27,7 @@ exports.postAddProduct = (req, res, next) => {
       path: "/admin/edit-product",
       editing: false,
       hasError: true,
+
       product: {
         title,
         imageUrl,
@@ -33,6 +35,7 @@ exports.postAddProduct = (req, res, next) => {
         description,
       },
       errorMessage: errors.array()[0].msg,
+      validationErrors: errors.array(),
     });
   }
   const product = new Product({
@@ -73,6 +76,7 @@ exports.getEditProduct = (req, res, next) => {
         product: product,
         isAuthenticated: req.session.isLoggedIn,
         errorMessage: null,
+        validationErrors: [],
       });
     })
     .catch((err) => console.log(err));
@@ -93,7 +97,9 @@ exports.postEditProduct = (req, res, next) => {
       path: "/admin/edit-product",
       editing: true,
       hasError: true,
+      validationErrors: errors.array(),
       product: {
+        _id: prodId,
         title: updatedTitle,
         imageUrl: updatedImageUrl,
         price: updatedPrice,
