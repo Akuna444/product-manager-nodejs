@@ -124,7 +124,9 @@ exports.postEditProduct = (req, res, next) => {
       });
     })
 
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      res.redirect("/500");
+    });
 };
 
 exports.getProducts = (req, res, next) => {
