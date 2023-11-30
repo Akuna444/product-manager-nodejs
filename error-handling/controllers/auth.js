@@ -84,7 +84,11 @@ exports.postLogin = (req, res, next) => {
         res.redirect("/login");
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Something went wrong");
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postSignup = (req, res, next) => {
@@ -230,5 +234,9 @@ exports.postNewPassword = (req, res, next) => {
     .then((result) => {
       res.redirect("/login");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Something went wrong");
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
