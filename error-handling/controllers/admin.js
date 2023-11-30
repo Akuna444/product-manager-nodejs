@@ -125,7 +125,9 @@ exports.postEditProduct = (req, res, next) => {
     })
 
     .catch((err) => {
-      res.redirect("/500");
+      const error = new Error("Something went wrong");
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
