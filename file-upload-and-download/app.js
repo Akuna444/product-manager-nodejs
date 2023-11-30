@@ -30,15 +30,18 @@ const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use("images", express.static(path.join(__dirname, "images")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "/images");
+    cb(null, "images");
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
+    cb(
+      null,
+      new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname
+    );
   },
 });
 
@@ -93,13 +96,13 @@ app.use(authRoutes);
 app.use(errorController.get500);
 app.use(errorController.get404);
 
-app.use((error, req, res, next) => {
-  res.status(500).render("500", {
-    pageTitle: "Error!",
-    path: "/500",
-    isAuthenticated: true,
-  });
-});
+// app.use((error, req, res, next) => {
+//   res.status(500).render("500", {
+//     pageTitle: "Error!",
+//     path: "/500",
+//     isAuthenticated: true,
+//   });
+// });
 
 mongoose
   .connect(MONGODB_URI)
