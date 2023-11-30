@@ -169,7 +169,27 @@ exports.getInvoices = (req, res, next) => {
 
     pdfDocument.pipe(res);
 
-    pdfDocument.text("Hellow there");
+    pdfDocument.fontSize(25).text("invoices");
+    pdfDocument.text("---------------------");
+
+    let totalPrice = 0;
+    order.products.forEach((prod) => {
+      totalPrice += prod.product.quantity * prod.product.price;
+
+      pdfDocument
+        .fontSize(14)
+        .text(
+          prod.product.title +
+            "-" +
+            prod.product.quantity +
+            "*" +
+            prod.product.price +
+            "$"
+        );
+    });
+
+    pdfDocument.text("---------------------");
+    pdfDocument.fontSize(20).text("Total price:" + totalPrice);
 
     pdfDocument.end();
   });
