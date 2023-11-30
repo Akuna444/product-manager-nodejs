@@ -169,20 +169,20 @@ exports.getInvoices = (req, res, next) => {
 
     pdfDocument.pipe(res);
 
-    pdfDocument.fontSize(25).text("invoices");
+    pdfDocument.fontSize(25).text("Invoices");
     pdfDocument.text("---------------------");
 
     let totalPrice = 0;
     order.products.forEach((prod) => {
-      totalPrice += prod.product.quantity * prod.product.price;
+      totalPrice += prod.quantity * prod.product.price;
 
       pdfDocument
         .fontSize(14)
         .text(
           prod.product.title +
             "-" +
-            prod.product.quantity +
-            "*" +
+            prod.quantity +
+            "x-" +
             prod.product.price +
             "$"
         );
