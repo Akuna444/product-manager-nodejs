@@ -1,6 +1,7 @@
 const Product = require("../models/product");
 const Order = require("../models/order");
 
+const pdfKit = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
 
@@ -158,12 +159,18 @@ exports.getInvoices = (req, res, next) => {
     const invoiceName = "invoice-" + orderId + ".pdf";
     const invoicePath = path.join("data", "invoices", invoiceName);
 
-    const file = fs.createReadStream(invoicePath);
+    const pdfDocument = new pdfKit();
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
       'inline; filename="' + invoiceName + '"'
     );
-    file.pipe(res);
+    pdfDocument.pipe(fs.createWriteStream(invoicePath));
+
+    pdfDocument.pipe(res);
+
+    pdfDocument.text("Hellow there");
+
+    pdfDocument.end();
   });
 };
