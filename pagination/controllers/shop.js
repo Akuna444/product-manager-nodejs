@@ -8,7 +8,7 @@ const path = require("path");
 const ITEMS_PER_PAGE = 2;
 
 exports.getProducts = (req, res, next) => {
-  const page = +req.query.page;
+  const page = +req.query.page || 1;
   let totalProducts;
   Product.find()
     .countDocuments()
