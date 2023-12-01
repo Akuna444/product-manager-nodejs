@@ -45,16 +45,28 @@ exports.getProduct = (req, res, next) => {
 
 exports.getIndex = (req, res, next) => {
   const page = req.query.page;
+  let totalProducts;
   Product.find()
-    .skip((page - 1) * ITEMS_PER_PAGE)
-    .limit(ITEMS_PER_PAGE)
-    .then((products) => {
-      res.render("shop/index", {
-        prods: products,
-        pageTitle: "Shop",
-        path: "/",
-      });
+    .count()
+    .then((numProduct) => {
+      totalProducts = numProduct;
+      return Product.skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE)
+        .then((products) => {
+          res.render("shop/index", {
+            prods: products,
+            pageTitle: "Shop",
+            path: "/",
+            totalProducts,
+            hasNextPage: ITEMS_PER_PAGE * page < totalProducts,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+          });
+        });
     })
+
     .catch((err) => {
       const error = new Error("Something went wrong");
       error.httpStatusCode = 500;
