@@ -5,6 +5,7 @@
     <body>
         <%- include('../includes/navigation.ejs') %>
         <main>
+            <% if (products.length > 0) { %>
                 <ul class="cart__item-list">
                     <% products.forEach(p => { %>
                         <li class="cart__item">
@@ -19,8 +20,11 @@
                 </ul>
                 <hr>
                 <div class="centered">
-                    <h2>Total: <%= totalSum %></h2>
+                    <a href="/checkout" class="btn"> Order Now!</a>
                 </div>
                 
+            <% } else { %>
+                <h1>No Products in Cart!</h1>
+            <% } %>
         </main>
         <%- include('../includes/end.ejs') %>
